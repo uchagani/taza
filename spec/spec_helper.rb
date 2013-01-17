@@ -1,11 +1,13 @@
 require 'rubygems'
 require 'bundler/setup'
 require 'mocha'
-require 'rubigen'
-require 'rubigen/helpers/generator_test_helper'
 require 'taza'
 require 'watir-webdriver'
 require 'selenium-webdriver'
+require 'generator_spec'
+require 'thor'
+require 'stringio'
+
 RSpec.configure do |config|
   config.mock_with :mocha
 end
@@ -20,16 +22,15 @@ PROJECT_NAME = 'example'
 PROJECT_FOLDER = File.join(TMP_ROOT,PROJECT_NAME)
 APP_ROOT = File.join(TMP_ROOT, PROJECT_NAME)
 
-def generator_sources
-  [RubiGen::PathSource.new(:test, File.join(File.dirname(__FILE__),"..","lib", "app_generators")),
-  RubiGen::PathSource.new(:test, File.join(File.dirname(__FILE__),"..", "generators"))]
+Dir[File.expand_path("../..", __FILE__) + "/generators/*/*.rb"].each do |generator|
+  require generator
 end
 
 module Helpers
   module Generator
     def generate_site(site_name)
       site_name = "#{site_name}#{Time.now.to_i}"
-      run_generator('site', [site_name], generator_sources)
+      run_generator(Site, [site_name])
       site_file_path = File.join(PROJECT_FOLDER,'lib','sites',"#{site_name.underscore}.rb")
       require site_file_path
       "::#{site_name.camelize}::#{site_name.camelize}".constantize.any_instance.stubs(:base_path).returns(PROJECT_FOLDER)
@@ -50,4 +51,25 @@ module Helpers
     end
   end
 end
-#### Rubigen helpers end
+
+def bare_teardown
+    FileUtils.rm_rf TMP_ROOT || APP_ROOT
+end
+
+def bare_setup
+    FileUtils.mkdir_p(APP_ROOT)
+    @stdout = StringIO.new
+end
+
+def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end

@@ -2,41 +2,96 @@ require 'spec_helper'
 require 'rubygems'
 require 'rake'
 require 'fileutils'
+require 'generator_spec/test_case'
 
-describe "Project Generator" do
-  include RubiGen::GeneratorTestHelper
 
-  before :all do
-    @spec_helper = File.join(TMP_ROOT,PROJECT_NAME,'spec','spec_helper.rb')
-    @rakefile = File.join(TMP_ROOT,PROJECT_NAME,'rakefile')
+
+
+  describe New, "with the default driver" do
+    include GeneratorSpec::TestCase
+    destination TMP_ROOT
+
+    arguments [PROJECT_NAME]
+
+    before :all do
+      prepare_destination
+      run_generator
+    end
+
+    after do
+      bare_teardown
+    end
+
+    specify do
+      destination_root.should have_structure {
+        directory "#{PROJECT_NAME}/config" do
+          file "config.yml" do
+            contains "driver: watir"
+            contains "browser: firefox"
+          end
+        end
+        directory "#{PROJECT_NAME}/lib" do
+          directory "sites"
+        end
+        directory "#{PROJECT_NAME}/spec" do
+          directory "integration"
+          directory "isolation"
+          directory "story"
+          directory "support"
+          file "spec_helper.rb"
+        end
+        directory "#{PROJECT_NAME}" do
+          file "Gemfile" do
+            contains "gem 'watir'"
+          end
+          file "Rakefile"
+        end
+      }
+
+    end
   end
 
-  before :each do
-    bare_setup
+
+  describe New, "argument NAME 'watir-webdriver'" do
+    include GeneratorSpec::TestCase
+    destination TMP_ROOT
+
+    arguments [PROJECT_NAME, 'watir-webdriver']
+
+    before :all do
+      prepare_destination
+      run_generator
+    end
+
+    specify do
+      destination_root.should have_structure {
+        directory "#{PROJECT_NAME}/config" do
+          file "config.yml" do
+            contains "driver: watir_webdriver"
+            contains "browser: firefox"
+          end
+        end
+        directory "#{PROJECT_NAME}/lib" do
+          directory "sites"
+        end
+        directory "#{PROJECT_NAME}/spec" do
+          directory "integration"
+          directory "isolation"
+          directory "story"
+          directory "support"
+          file "spec_helper.rb"
+        end
+        directory "#{PROJECT_NAME}" do
+          file "Gemfile" do
+            contains "gem 'watir-webdriver'"
+          end
+          file "Rakefile"
+        end
+      }
+    end
   end
 
-  after :each do
-    bare_teardown
-  end
 
-  it "should generate a spec helper that can be required" do
-    run_generator('taza', [APP_ROOT], generator_sources)
-    system("ruby -c #{@spec_helper} > #{null_device}").should be_true
-  end
 
-  it "should generate a rakefile that can be required" do
-    run_generator('taza', [APP_ROOT], generator_sources)
-    system("ruby -c #{@spec_helper} > #{null_device}").should be_true
-  end
 
-  it "should generate a console script" do
-    run_generator('taza', [APP_ROOT], generator_sources)
-    File.exists?(File.join(APP_ROOT,'script','console')).should be_true
-  end
 
-  it "should generate a windows console script" do
-    run_generator('taza', [APP_ROOT], generator_sources)
-    File.exists?(File.join(APP_ROOT,'script','console.cmd')).should be_true
-  end
-
-end
