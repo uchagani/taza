@@ -11,6 +11,7 @@ class Site < Thor::Group
 	argument :url, :optional => true, :default => 'www.google.com'
 
 	def create
+	 puts :url
       site_path = File.join('lib','sites')
       template("site.tt", "#{site_path}/#{name.underscore}.rb")
 	  template("site.yml.erb", "config/#{name.underscore}.yml")

@@ -31,11 +31,11 @@ class New < Thor::Group
      end
 
      def create_rakefile 
-     	template("rakefile.tt", "#{name}/rakefile.rb")
+     	template("rakefile.tt", "#{name}/Rakefile")
      end
 
      def create_gemfile
-     	template("Gemfile.tt", "#{name}/Gemfile.rb")
+     	template("Gemfile.tt", "#{name}/Gemfile")
      	gem "#{driver}"
      	#run 'bundle install'
      end
