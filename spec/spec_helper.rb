@@ -7,14 +7,7 @@ require 'selenium-webdriver'
 require 'generator_spec'
 require 'thor'
 require 'stringio'
-
-RSpec.configure do |config|
-  config.mock_with :mocha
-end
-
-def null_device
-  File.exists?('/dev/null') ? '/dev/null' : 'NUL'
-end
+require 'fileutils'
 
 # Must set before requiring generator libs.
 TMP_ROOT = File.join(File.dirname(__FILE__),"sandbox","generated")
@@ -22,15 +15,32 @@ PROJECT_NAME = 'example'
 PROJECT_FOLDER = File.join(TMP_ROOT,PROJECT_NAME)
 APP_ROOT = File.join(TMP_ROOT, PROJECT_NAME)
 
+Dir[File.dirname(__FILE__) + "/support/**/*.rb"].each {|f| require f}
+
+RSpec.configure do |config|
+  config.mock_with :mocha
+  config.include Spec::FileMatchers
+  config.include  Spec::GeneratorRunner
+
+   
+end
+
+def null_device
+  File.exist?('/dev/null') ? '/dev/null' : 'NUL'
+end
+
+
+
 Dir[File.expand_path("../..", __FILE__) + "/generators/*/*.rb"].each do |generator|
   require generator
 end
 
 module Helpers
   module Generator
+
     def generate_site(site_name)
-      site_name = "#{site_name}#{Time.now.to_i}"
-      run_generator(Site, [site_name])
+     # site_name = "#{site_name}#{Time.now.to_i}"
+      thor("site #{site_name}")
       site_file_path = File.join(PROJECT_FOLDER,'lib','sites',"#{site_name.underscore}.rb")
       require site_file_path
       "::#{site_name.camelize}::#{site_name.camelize}".constantize.any_instance.stubs(:base_path).returns(PROJECT_FOLDER)
@@ -61,15 +71,20 @@ def bare_setup
     @stdout = StringIO.new
 end
 
-def capture(stream)
-    begin
-      stream = stream.to_s
-      eval "$#{stream} = StringIO.new"
-      yield
-      result = eval("$#{stream}").string
-    ensure
-      eval("$#{stream} = #{stream.upcase}")
-    end
 
-    result
+
+module FileExt
+  # Checks if a file exists.
+  def exist?
+    File.exist?(path)
   end
+
+  # The contents of the file.
+  def contents
+    read
+  end
+end
+
+class File
+  include FileExt
+end

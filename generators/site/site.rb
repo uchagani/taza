@@ -10,6 +10,13 @@ class Site < Thor::Group
 	argument :name
 	argument :url, :optional => true, :default => 'www.google.com'
 
+	def verify_site_exists 
+		 if File.directory?(File.join(destination_root,'lib','sites', name.underscore))
+			say "******#{name} already exists.******"
+			exit 1
+		 end
+	end
+
 	def create
 	 puts :url
       site_path = File.join('lib','sites')

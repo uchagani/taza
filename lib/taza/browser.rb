@@ -7,11 +7,13 @@ module Taza
     #     browser = Taza::Browser.create(Taza::Settings.config)
     #
     def self.create(params={})
+      puts params[:driver]
       self.send("create_#{params[:driver]}".to_sym,params)
     end
 
     def self.browser_class(params)
       self.send("#{params[:driver]}_#{params[:browser]}".to_sym)
+      puts "#{params[:driver]}_#{params[:browser]}"
     end
 
     private
@@ -56,6 +58,7 @@ module Taza
 
     def self.watir_ie(params)
       require 'watir'
+      require 'watir-classic'
       if params[:attach]
         browser = Watir::IE.find(:title, //)
       end

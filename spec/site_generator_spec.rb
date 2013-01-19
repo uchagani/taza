@@ -58,10 +58,6 @@ describe Site, "arguments NAME URL" do
 
     arguments ['BingFoo', 'http://bing.com']
 
-    before :all do
-      @site_name = "BingFoo"
-    end
-
     before :each do
       bare_setup
       prepare_destination
@@ -114,27 +110,23 @@ describe Site, "no arguments" do
     end
 end
 
-describe "valid site" do 
+describe Site, "valid site" do 
   include GeneratorSpec::TestCase
-  include Helpers::Generator
   include Helpers::Taza
+  include Helpers::Generator
   destination APP_ROOT
-  
-    before :all do 
-      @site_name = "valid"
+
+    before :each do
+      bare_setup
+      prepare_destination
     end
+
+    after :each do
+      bare_teardown
+    end 
     
     it "generated site that uses the block given in new" do
-      def generate_site(site_name) 
-        site_name = "#{site_name}#{Time.now.to_i}"
-        run_generator('site', site_name)
-        site_file_path = File.join(PROJECT_FOLDER,'lib','sites',"#{site_name.underscore}.rb")
-        require site_file_path
-        "::#{site_name.camelize}::#{site_name.camelize}".constantize.any_instance.stubs(:base_path).returns(PROJECT_FOLDER)
-        site_name.camelize.constantize
-      end
-
-        @site_class = generate_site(@site_name)
+        @site_class = generate_site("valid#{Time.now.to_i}")
         stub_settings
         stub_browser
         foo = nil
@@ -143,4 +135,27 @@ describe "valid site" do
         foo.should be_a_kind_of(Taza::Site)
     end
 
+end
+
+describe Site, "existing site" do 
+  include GeneratorSpec::TestCase
+  include Helpers::Generator
+  include Helpers::Taza
+
+  destination APP_ROOT
+  arguments ['GAP']
+
+  before :all do 
+    prepare_destination
+    generate_site('Gap')
+  end
+
+  after :all do 
+    bare_teardown
+  end
+  
+  it "exits the process" do 
+    lambda { run_generator }.should raise_error SystemExit
+  end
+  
 end

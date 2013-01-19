@@ -43,6 +43,10 @@ require 'generator_spec/test_case'
         directory "#{PROJECT_NAME}" do
           file "Gemfile" do
             contains "gem 'watir'"
+            contains "gem 'watir', '3.0.0'"
+            contains "gem 'watir-classic'"
+            contains "gem 'watir-webdriver'"
+            contains "gem 'i18n'"
           end
           file "Rakefile"
         end
@@ -52,11 +56,11 @@ require 'generator_spec/test_case'
   end
 
 
-  describe New, "argument NAME 'watir-webdriver'" do
+  describe New, "argument NAME 'selenium-webdriver'" do
     include GeneratorSpec::TestCase
     destination TMP_ROOT
 
-    arguments [PROJECT_NAME, 'watir-webdriver']
+    arguments [PROJECT_NAME, 'selenium-webdriver']
 
     before :all do
       prepare_destination
@@ -67,7 +71,7 @@ require 'generator_spec/test_case'
       destination_root.should have_structure {
         directory "#{PROJECT_NAME}/config" do
           file "config.yml" do
-            contains "driver: watir_webdriver"
+            contains "driver: selenium_webdriver"
             contains "browser: firefox"
           end
         end
@@ -83,7 +87,7 @@ require 'generator_spec/test_case'
         end
         directory "#{PROJECT_NAME}" do
           file "Gemfile" do
-            contains "gem 'watir-webdriver'"
+            contains "gem 'selenium-webdriver'"
           end
           file "Rakefile"
         end

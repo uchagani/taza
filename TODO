@@ -20,3 +20,6 @@ taza
  - clean all the config tests
  - add test/spec support for generators
  - add test/spec support for fixtures
+
+
+ -remove dependency on generator_spec. Write own helpers for generator tests.

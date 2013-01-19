@@ -9,14 +9,6 @@ if %w(-v --version).include? ARGV.first
   exit(0)
 end
 
-#require 'rubigen/scripts/generate'
-#source = RubiGen::PathSource.new(:application,
-#  File.join(File.dirname(__FILE__), "../lib/app_generators"))
-#RubiGen::Base.reset_sources
-#RubiGen::Base.append_sources source
-#RubiGen::Scripts::Generate.new.run(ARGV, :generator => 'taza')
-
-
 
 Dir[File.expand_path("../..", __FILE__) + "/generators/*/*.rb"].each do |generator|
   require generator
@@ -25,9 +17,9 @@ end
 class Generate < Thor
   register(New, "new", "new NAME DRIVER", "Generates a new taza project, and configures the driver.")
   register(Site, "site", "site NAME", "Generates a new site.")
-  register(Page, "page", "page SITE_NAME NAME SUBTYPE", "Generates a new page and associated spec. Will put into isolation subfolders if declared.")
-  register(Partial, "partial", "partial SITE_NAME NAME", "Generates a partial page for the site.")
-  register(Flow, "flow", "flow SITE_NAME NAME", "Generates a flow for the site.")
+  register(Page, "page", "page NAME SITE_NAME SECTION", "Generates a new page and associated spec. SITE_NAME must exist.")
+  register(Partial, "partial", "partial NAMES SITE_NAME", "Generates a partial page for the site.")
+  register(Flow, "flow", "flow NAME SITE_NAME", "Generates a flow for the site.")
   register(Specs, "specs", "specs [something]", "Generates either a functional or integration spec.")
 end
 
