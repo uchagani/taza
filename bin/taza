@@ -20,7 +20,8 @@ class Generate < Thor
   register(Page, "page", "page NAME SITE_NAME SECTION", "Generates a new page and associated spec. SITE_NAME must exist.")
   register(Partial, "partial", "partial NAME SITE_NAME", "Generates a partial page for the site.")
   register(Flow, "flow", "flow NAME SITE_NAME", "Generates a flow for the site.")
-  register(Specs, "specs", "specs [something]", "Generates either a functional or integration spec.")
+  register(IsolationSpec, "isolation", "functional NAME SITE_NAME SECTION", "Generates a functional spec.")
+  register(IntegrationSpec, "integration", "integration NAME SITES", "Generates a integration spec.")
 end
 
 Generate.start
