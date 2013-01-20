@@ -18,10 +18,6 @@ class New < Thor::Group
      	empty_directory("#{name}/lib/sites")
      end
 
-     def create_script_folder
-     	empty_directory("#{name}/script")
-     end
-
      def create_spec_folder
      	template("spec_helper.tt", "#{name}/spec/spec_helper.rb")
      	empty_directory("#{name}/spec/isolation")
