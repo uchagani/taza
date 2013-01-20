@@ -7,27 +7,41 @@ module Taza
     #     browser = Taza::Browser.create(Taza::Settings.config)
     #
     def self.create(params={})
-      puts params[:driver]
+      puts "#{params}"
       self.send("create_#{params[:driver]}".to_sym,params)
     end
 
     def self.browser_class(params)
       self.send("#{params[:driver]}_#{params[:browser]}".to_sym)
-      puts "#{params[:driver]}_#{params[:browser]}"
     end
 
     private
 
+     #~ def self.create_watir(params)
+       #~ method = "watir_#{params[:browser]}"
+       #~ raise BrowserUnsupportedError unless self.respond_to?(method)
+       #~ watir = self.send(method,params)
+       #~ watir
+     #~ end
+
     def self.create_watir(params)
-      method = "watir_#{params[:browser]}"
-      raise BrowserUnsupportedError unless self.respond_to?(method)
-      watir = self.send(method,params)
-      watir
+      puts "#{Watir::BUNDLE_VERSION}"
+      if Watir::BUNDLE_VERSION == '4.0.0'
+        puts "4 path"
+        require 'watir'
+        Watir::Browser.new params[:browser].to_sym
+      else
+        puts "3 path"
+        method = "watir_#{params[:browser]}"
+        raise BrowserUnsupportedError unless self.respond_to?(method)
+        watir = self.send(method,params)
+        watir     
+      end
     end
 
-    def self.create_watir_webdriver(params)
-      require 'watir-webdriver'
-      Watir::Browser.new(params[:browser])
+     def self.create_watir_webdriver(params)
+       require 'watir-webdriver'
+       Watir::Browser.new(params[:browser])
     end
 
     def self.create_selenium(params)
@@ -46,24 +60,24 @@ module Taza
       Selenium::WebDriver.for params[:browser].to_sym
     end
 
-    def self.watir_firefox(params)
-      require 'firewatir'
-      FireWatir::Firefox.new
-    end
+     def self.watir_firefox(params)
+       require 'firewatir'
+       FireWatir::Firefox.new
+     end
 
-    def self.watir_safari(params)
-      require 'safariwatir'
-      Watir::Safari.new
-    end
+     def self.watir_safari(params)
+       require 'safariwatir'
+       Watir::Safari.new
+     end
 
-    def self.watir_ie(params)
-      require 'watir'
-      require 'watir-classic'
-      if params[:attach]
-        browser = Watir::IE.find(:title, //)
-      end
-      browser || Watir::IE.new
-    end
+     def self.watir_ie(params)
+       require 'watir'
+       puts "#{Watir::BUNDLE_VERSION}"
+       if params[:attach]
+         browser = Watir::IE.find(:title, //)
+       end
+       browser || Watir::IE.new
+     end
   end
 
   # We don't know how to create the browser you asked for
