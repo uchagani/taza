@@ -14,7 +14,7 @@ describe Page, "arguments NAME SITE_NAME" do
   arguments ['CheckOut', 'Gap']
 
   before :each do 
-    #bare_setup
+    bare_setup
     prepare_destination
     generate_site('Gap')
     run_generator
