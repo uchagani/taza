@@ -26,7 +26,7 @@ require 'generator_spec/test_case'
       destination_root.should have_structure {
         directory "#{PROJECT_NAME}/config" do
           file "config.yml" do
-            contains "driver: watir"
+            contains "driver: watir_webdriver"
             contains "browser: firefox"
           end
         end
@@ -94,6 +94,9 @@ require 'generator_spec/test_case'
       }
     end
   end
+
+
+  describe New, "argument NAME DRIVER BROWSER"
 
 
 

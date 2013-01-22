@@ -8,7 +8,8 @@ class New < Thor::Group
      source_root File.expand_path('../templates', __FILE__)
 
      argument :name
-     argument :driver, :default => 'watir', :optional => true 
+     argument :driver, :default => 'watir_webdriver', :optional => true 
+     argument :browser, :default => 'firefox', :optional => true
 
      def create_config_file
      	template('config.tt', "#{name}/config/config.yml")

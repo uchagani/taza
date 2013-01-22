@@ -21,7 +21,7 @@ class Flow < Thor::Group
 	def create_flow
       flow_path = File.join('lib', 'sites', "#{site_name}", 'flows')
       puts "#{flow_path}"
-      template('flow.tt', "#{flow_path}/#{name.underscore}_flow.rb")
+      template('flow.tt', "#{flow_path}/#{name.underscore}.rb")
 	end
 
 end
