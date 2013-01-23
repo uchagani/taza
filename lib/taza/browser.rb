@@ -16,22 +16,13 @@ module Taza
     end
 
     private
-
-     #~ def self.create_watir(params)
-       #~ method = "watir_#{params[:browser]}"
-       #~ raise BrowserUnsupportedError unless self.respond_to?(method)
-       #~ watir = self.send(method,params)
-       #~ watir
-     #~ end
-
+    
     def self.create_watir(params)
-      puts "#{Watir::BUNDLE_VERSION}"
+	require 'watir'
       if Watir::BUNDLE_VERSION == '4.0.0'
-        puts "4 path"
         require 'watir'
         Watir::Browser.new params[:browser].to_sym
       else
-        puts "3 path"
         method = "watir_#{params[:browser]}"
         raise BrowserUnsupportedError unless self.respond_to?(method)
         watir = self.send(method,params)
