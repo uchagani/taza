@@ -18,7 +18,7 @@ module Taza
     private
     
     def self.create_watir(params)
-	require 'watir'
+	   require 'watir'
       if Watir::BUNDLE_VERSION == '4.0.0'
         require 'watir'
         Watir::Browser.new params[:browser].to_sym
