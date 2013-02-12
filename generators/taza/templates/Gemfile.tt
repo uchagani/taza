@@ -3,13 +3,3 @@ source :rubygems
 gem 'taza', '<%= Taza::VERSION %>'
 
 #Add any gems you might need to use in your project here.
-<% if driver == 'watir' or 'watir-webdriver' %>
-platforms :mingw, :mswin do 
-	gem 'watir', '3.0.0'
-	gem 'watir-classic'
-end
-gem 'watir-webdriver'
-gem 'i18n'
-<% else %> 
-gem '<%= driver %>'
-<% end %>	

@@ -16,7 +16,7 @@ describe Flow, "arguments NAME SITE_NAME" do
     run_generator
   end
 
-  after :all do 
+  after :all do
     bare_teardown
   end
 
@@ -26,7 +26,7 @@ describe Flow, "arguments NAME SITE_NAME" do
                 directory "sites" do 
                   directory "#{"Foo".underscore}" do 
                     directory "flows" do 
-                      file "check_out_flow.rb" do 
+                      file "check_out.rb" do
                         contains "Foo"
                         contains "Foo < ::Taza::Site"
                         contains "def check_out_flow(params={})"

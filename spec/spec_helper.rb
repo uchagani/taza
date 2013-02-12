@@ -14,7 +14,7 @@ RSpec.configure do |config|
 end
 
 def null_device
-  File.exists?('/dev/null') ? '/dev/null' : 'NUL'
+  File.file?('/dev/null') ? '/dev/null' : 'NUL'
 end
 
 # Must set before requiring generator libs.

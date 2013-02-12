@@ -41,13 +41,7 @@ require 'generator_spec/test_case'
           file "spec_helper.rb"
         end
         directory "#{PROJECT_NAME}" do
-          file "Gemfile" do
-            contains "gem 'watir'"
-            contains "gem 'watir', '3.0.0'"
-            contains "gem 'watir-classic'"
-            contains "gem 'watir-webdriver'"
-            contains "gem 'i18n'"
-          end
+          file "Gemfile"
           file "Rakefile"
         end
       }
@@ -65,6 +59,10 @@ require 'generator_spec/test_case'
     before :all do
       prepare_destination
       run_generator
+    end
+
+    after do
+      bare_teardown
     end
 
     specify do
@@ -86,9 +84,7 @@ require 'generator_spec/test_case'
           file "spec_helper.rb"
         end
         directory "#{PROJECT_NAME}" do
-          file "Gemfile" do
-            contains "gem 'selenium-webdriver'"
-          end
+          file "Gemfile"
           file "Rakefile"
         end
       }

@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<Selenium>, ["~> 1.1.14"])
   s.add_runtime_dependency(%q<watir-webdriver>, ["~> 0.6.2"])
   s.add_runtime_dependency(%q<thor>)
-
+  s.add_development_dependency(%q<generator_spec>)
+  s.add_development_dependency(%q<watir>)
 
 end
