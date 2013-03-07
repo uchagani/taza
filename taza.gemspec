@@ -21,12 +21,9 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency(%q<rake>, ["~> 10.0.3"])
   s.add_runtime_dependency(%q<mocha>, ["~> 0.9.3"])
   s.add_runtime_dependency(%q<activesupport>)
-  s.add_runtime_dependency(%q<rspec>, ["~> 2.6"])
+  s.add_runtime_dependency(%q<rspec>, ["~> 2.13.0"])
   s.add_runtime_dependency(%q<user-choices>, ["~> 1.1.6.1"])
-  s.add_runtime_dependency(%q<Selenium>, ["~> 1.1.14"])
-  s.add_runtime_dependency(%q<watir-webdriver>, ["~> 0.6.2"])
   s.add_runtime_dependency(%q<thor>)
   s.add_development_dependency(%q<generator_spec>)
-  s.add_development_dependency(%q<watir>)
 
 end
