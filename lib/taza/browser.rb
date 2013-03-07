@@ -17,16 +17,10 @@ module Taza
     private
     
     def self.create_watir(params)
-	   require 'watir'
-      if Watir::BUNDLE_VERSION == '4.0.0'
-        require 'watir'
-        Watir::Browser.new params[:browser].to_sym
-      else
         method = "watir_#{params[:browser]}"
         raise BrowserUnsupportedError unless self.respond_to?(method)
         watir = self.send(method,params)
-        watir     
-      end
+        watir
     end
 
      def self.create_watir_webdriver(params)
