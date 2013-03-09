@@ -15,17 +15,17 @@ module Taza
     end
 
     private
-    
+
     def self.create_watir(params)
-        method = "watir_#{params[:browser]}"
-        raise BrowserUnsupportedError unless self.respond_to?(method)
-        watir = self.send(method,params)
-        watir
+      method = "watir_#{params[:browser]}"
+      raise BrowserUnsupportedError unless self.respond_to?(method)
+      watir = self.send(method,params)
+      watir
     end
 
-     def self.create_watir_webdriver(params)
-       require 'watir-webdriver'
-       Watir::Browser.new(params[:browser])
+    def self.create_watir_webdriver(params)
+      require 'watir-webdriver'
+      Watir::Browser.new(params[:browser])
     end
 
     def self.create_selenium(params)
@@ -44,26 +44,25 @@ module Taza
       Selenium::WebDriver.for params[:browser].to_sym
     end
 
-     def self.watir_firefox(params)
-       require 'firewatir'
-       FireWatir::Firefox.new
-     end
+    def self.watir_firefox(params)
+      require 'firewatir'
+      FireWatir::Firefox.new
+    end
 
-     def self.watir_safari(params)
-       require 'safariwatir'
-       Watir::Safari.new
-     end
+    def self.watir_safari(params)
+      require 'safariwatir'
+      Watir::Safari.new
+    end
 
-     def self.watir_ie(params)
-       require 'watir'
-       if params[:attach]
-         browser = Watir::IE.find(:title, //)
-       end
-       browser || Watir::IE.new
-     end
+    def self.watir_ie(params)
+      require 'watir'
+      if params[:attach]
+        browser = Watir::IE.find(:title, //)
+      end
+      browser || Watir::IE.new
+    end
   end
 
   # We don't know how to create the browser you asked for
   class BrowserUnsupportedError < StandardError; end
 end
-

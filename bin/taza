@@ -16,7 +16,7 @@ end
 
 class Generate < Thor
   register(New, "new", "new NAME DRIVER BROWSER", "Generates a new taza project, and configures the driver.")
-  register(Site, "site", "site NAME", "Generates a new site.")
+  register(Site, "site", "site NAME URL", "Generates a new site.")
   register(Page, "page", "page NAME SITE_NAME SECTION", "Generates a new page and associated spec. SITE_NAME must exist.")
   register(Partial, "partial", "partial NAME SITE_NAME", "Generates a partial page for the site.")
   register(Flow, "flow", "flow NAME SITE_NAME", "Generates a flow for the site.")
